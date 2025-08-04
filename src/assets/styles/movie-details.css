@@ -1,0 +1,45 @@
+.movie-details-page {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+.back-button {
+  margin-bottom: 1rem;
+  background: #007bff;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.movie-details-card {
+  display: flex;
+  gap: 2rem;
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+
+.movie-details-image {
+  width: 300px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.movie-details-info {
+  flex: 1;
+}
+
+.movie-details-info h2 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+.movie-details-info p {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
