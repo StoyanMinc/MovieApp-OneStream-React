@@ -38,3 +38,17 @@
 .save-button:hover {
     background: #0056b3;
 }
+
+.header-container a {
+    color: white;
+    padding: 10px;
+    text-decoration: none;
+    border: 1px solid white;
+    border-radius: 10px;
+}
+
+.header-container a:hover {
+    background-color: gray;
+    color: black;
+    font-weight: bold;
+}

@@ -7,6 +7,7 @@ import Home from "./components/Home"
 import MovieList from "./components/MovieList"
 import MovieDetails from "./components/MovieDetails"
 import MovieEdit from "./components/MovieEdit"
+import SearchByActors from "./components/SearchByActors"
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
                 <Route path='/movie-list' element={<MovieList />} />
                 <Route path='/movie-list/:id/details' element={<MovieDetails />} />
                 <Route path='/movie-list/:id/edit' element={<MovieEdit />} />
+                <Route path='/search-by-actors' element={<SearchByActors />} />
             </Routes>
         </MovieContextProvider>
     )

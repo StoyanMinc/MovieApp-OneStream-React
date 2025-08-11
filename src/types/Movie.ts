@@ -15,3 +15,8 @@ export interface Movie {
   vote_count: number;
   genres?: string[];
 }
+
+export interface Actor {
+  id: string;
+  name: string
+}
