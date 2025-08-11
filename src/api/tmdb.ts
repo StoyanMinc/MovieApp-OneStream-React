@@ -7,12 +7,12 @@ export async function fetchMoviesByTitles(titles: string[], language: string) {
     return Promise.all(
         titles.map(async (title) => {
             try {
-                const response = await axios.get('https://api.themoviedb.org/3/search/movie', {
-                    params: {
-                        api_key: TMDB_API_KEY,
-                        query: title,
-                        language
-                    },
+                const response = await axios.get(`https://api.themoviedb.org/3/search/movie?api_key=${TMDB_API_KEY}&query=${title}&language=${language}`, {
+                    // params: {
+                    //     api_key: TMDB_API_KEY,
+                    //     query: title,
+                    //     language
+                    // },
                 });
 
                 const movie = response.data.results?.[0];
@@ -73,6 +73,22 @@ export async function saveMovies(movies: Movie[]) {
         console.log('Saved successfully:', movies);
     } catch (error) {
         console.error('Save failed', error);
+    }
+}
+
+export async function searchActorsByQuery(query: string, language: string) {
+    try {
+        const response = await axios.get('https://api.themoviedb.org/3/search/person', {
+            params: {
+                api_key: TMDB_API_KEY,
+                query,
+                language
+            },
+        });
+        console.log(response);
+        return response.data.results;
+    } catch (error) {
+        console.error('Error searching actors:', error);
     }
 
 }
