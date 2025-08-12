@@ -90,5 +90,20 @@ export async function searchActorsByQuery(query: string, language: string) {
     } catch (error) {
         console.error('Error searching actors:', error);
     }
+}
 
+export async function searchMoviesByActors(actorsIds: string, language: string) {
+    try {
+        const response = await axios.get('https://api.themoviedb.org/3/discover/movie', {
+            params: {
+                api_key: TMDB_API_KEY,
+                with_cast: actorsIds,
+                language
+            },
+        });
+        console.log(response);
+        return response.data.results;
+    } catch (error) {
+        console.error('Error searching actors:', error);
+    }
 }

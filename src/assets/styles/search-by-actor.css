@@ -42,6 +42,7 @@
     margin-top: 20px;
     align-items: center;
     flex-direction: column;
+    gap: 20px;
 }
 
 .choosen-actors-container h3 {
@@ -54,6 +55,30 @@
     gap: 5px;
 }
 
-.choosen-actors-container ul li{
+.choosen-actors-container ul li {
     list-style: none;
+}
+
+.searched-movies-container {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.searched-movie-container {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 200px;
+}
+.searched-movie-title-holder{
+    flex-grow: 1;
+}
+
+.searched-movie-container p {
+    font-size: 14px;
+    font-weight: bold;
 }

@@ -1,31 +1,39 @@
 import { useEffect, useState } from "react";
-import type { Actor } from "../types/Movie";
+import type { Actor, Movie } from "../types/Movie";
 import { useMovieContext } from "../contexts/MovieContext";
-import { searchActorsByQuery } from "../api/tmdb";
+import { searchActorsByQuery, searchMoviesByActors } from "../api/tmdb";
 
 export default function SearchByActors() {
     const { language } = useMovieContext()!;
     const [query, setQuery] = useState<string>('');
     const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
-    const [searchResults, setSearchResults] = useState<Actor[]>([]);
-    const [actors, setActors] = useState<Actor[]>([]);
-
+    const [searchedActors, setSearchedActors] = useState<Actor[]>([]);
+    const [choosenActors, setChoosenActors] = useState<Actor[]>([]);
+    const [searchedMovies, setSearchedMovies] = useState<Movie[]>([]);
     useEffect(() => {
         const delayDebounce = setTimeout(() => {
-            const fetchSearchResults = async () => {
+            const fetchSearchedActors = async () => {
                 const results = await searchActorsByQuery(query, language);
-                setSearchResults(results);
+                setSearchedActors(results);
                 setIsDropdownVisible(true);
             };
 
             if (query.length > 1) {
-                fetchSearchResults();
+                fetchSearchedActors();
             }
         }, 300);
 
         return () => clearTimeout(delayDebounce);
     }, [query, language]);
 
+    const searchMoviesByActorsHandler = async () => {
+        const actorsIds = choosenActors.map((actor) => actor.id).join(',');
+        const result = await searchMoviesByActors(actorsIds, language);
+        setSearchedMovies(result);
+        console.log(result);
+        setQuery('');
+        setChoosenActors([]);
+    }
     return (
         <div className="search-by-actors-container">
             <div className="search-by-actors-input-container">
@@ -38,15 +46,15 @@ export default function SearchByActors() {
                     onChange={(e) => setQuery(e.target.value)}
                 />
             </div>
-            {isDropdownVisible && searchResults.length > 0 && (
+            {isDropdownVisible && searchedActors.length > 0 && (
                 <ul className="actors-drop-down">
-                    {searchResults.map((result) => (
+                    {searchedActors.map((result) => (
                         <li
                             key={result.id}
                             onClick={() => {
-                                setActors(prev => [...prev, result]);
+                                setChoosenActors(prev => [...prev, result]);
                                 setQuery('');
-                                setSearchResults([]);
+                                setSearchedActors([]);
                                 setIsDropdownVisible(false);
                             }}
                             className="search-dropdown-item"
@@ -56,14 +64,31 @@ export default function SearchByActors() {
                     ))}
                 </ul>
             )}
-            <div className="choosen-actors-container">
-                <h3>Choosen actors:</h3>
-                <ul>
-                    {actors.map((actor) => (
-                        <li>{actor.name}</li>
+            {choosenActors.length > 0 && (
+                <div className="choosen-actors-container">
+                    <h3>Choosen choosenActors:</h3>
+                    <ul>
+                        {choosenActors.map((actor) => (
+                            <li>{actor.name}</li>
+                        ))}
+                    </ul>
+                    <button onClick={searchMoviesByActorsHandler}>Search for movies</button>
+                </div>
+            )}
+            {searchedMovies.length > 0 && (
+                <div className="searched-movies-container">
+                    {searchedMovies.map((movie) => (
+                        <div className="searched-movie-container">
+                            <div className="searched-movie-title-holder">
+                                <p>{movie.title}</p>
+                            </div>
+                            <img src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} alt={movie.title} />
+                            <button>Add to your movies</button>
+                        </div>
                     ))}
-                </ul>
-            </div>
+                </div>
+            )}
+
         </div>
     );
 }
