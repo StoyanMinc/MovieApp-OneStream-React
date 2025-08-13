@@ -17,7 +17,7 @@ interface MovieContextType {
 export const MovieContext = createContext<MovieContextType | undefined>(undefined);
 
 export const MovieContextProvider = ({ children }: { children: ReactNode }) => {
-    const [movies, setMovies] = useState<any[]>([]);
+    const [movies, setMovies] = useState<Movie[]>([]);
     const [isMoviesSaved, setIsMoviesSaved] = useState<boolean>(false);
     const [genres, setGenres] = useState<any[]>([]);
     const [language, setLanguage] = useState('en-US');

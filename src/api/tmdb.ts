@@ -1,5 +1,6 @@
 import axios from 'axios';
 import type { Movie } from '../types/Movie';
+import toast from 'react-hot-toast/headless';
 
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 
@@ -70,7 +71,6 @@ export async function saveMovies(movies: Movie[]) {
         });
 
         if (!response.ok) throw new Error('Failed to save');
-        console.log('Saved successfully:', movies);
     } catch (error) {
         console.error('Save failed', error);
     }
@@ -85,7 +85,6 @@ export async function searchActorsByQuery(query: string, language: string) {
                 language
             },
         });
-        console.log(response);
         return response.data.results;
     } catch (error) {
         console.error('Error searching actors:', error);
@@ -101,9 +100,9 @@ export async function searchMoviesByActors(actorsIds: string, language: string) 
                 language
             },
         });
-        console.log(response);
         return response.data.results;
     } catch (error) {
+        toast.error('Error with fetching movie by actors!')
         console.error('Error searching actors:', error);
     }
 }

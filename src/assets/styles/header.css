@@ -39,6 +39,11 @@
     background: #0056b3;
 }
 
+.header-links-container {
+    display: flex;
+    gap: 10px;
+}
+
 .header-container a {
     color: white;
     padding: 10px;

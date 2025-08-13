@@ -18,8 +18,9 @@ export default function Header() {
                 <h1>Welcome to Movie land ;)</h1>
                 <h3>Search you favorite movies, save it and more...</h3>
             </div>
-            <div>
+            <div className="header-links-container">
                 <Link to={'/search-by-actors'}>Search by actors</Link>
+                <Link to={'/movie-list'}>Go to movie list</Link>
             </div>
         </div>
     );

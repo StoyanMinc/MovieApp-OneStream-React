@@ -19,6 +19,8 @@
 
 .search-by-actors-input-container input {
     padding: 5px;
+    border-radius: 10px;
+    border: none;
 }
 
 .actors-drop-down {
@@ -74,7 +76,8 @@
     gap: 10px;
     width: 200px;
 }
-.searched-movie-title-holder{
+
+.searched-movie-title-holder {
     flex-grow: 1;
 }
 

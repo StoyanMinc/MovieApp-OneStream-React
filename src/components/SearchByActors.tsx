@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import type { Actor, Movie } from "../types/Movie";
 import { useMovieContext } from "../contexts/MovieContext";
 import { searchActorsByQuery, searchMoviesByActors } from "../api/tmdb";
+import toast from "react-hot-toast";
 
 export default function SearchByActors() {
-    const { language } = useMovieContext()!;
+    const { language, setMovies } = useMovieContext()!;
     const [query, setQuery] = useState<string>('');
     const [isDropdownVisible, setIsDropdownVisible] = useState<boolean>(false);
     const [searchedActors, setSearchedActors] = useState<Actor[]>([]);
@@ -30,10 +31,15 @@ export default function SearchByActors() {
         const actorsIds = choosenActors.map((actor) => actor.id).join(',');
         const result = await searchMoviesByActors(actorsIds, language);
         setSearchedMovies(result);
-        console.log(result);
         setQuery('');
         setChoosenActors([]);
+        toast.success('Successfuly fetched movie by actors!');
+
     }
+    const addMovieHandler = (movie: Movie) => {
+        setMovies((prev) => [...prev, movie])
+        setSearchedMovies((prev) => prev.filter((m) => m.id !== movie.id));
+    };
     return (
         <div className="search-by-actors-container">
             <div className="search-by-actors-input-container">
@@ -69,7 +75,7 @@ export default function SearchByActors() {
                     <h3>Choosen choosenActors:</h3>
                     <ul>
                         {choosenActors.map((actor) => (
-                            <li>{actor.name}</li>
+                            <li key={actor.id}>{actor.name}</li>
                         ))}
                     </ul>
                     <button onClick={searchMoviesByActorsHandler}>Search for movies</button>
@@ -78,12 +84,12 @@ export default function SearchByActors() {
             {searchedMovies.length > 0 && (
                 <div className="searched-movies-container">
                     {searchedMovies.map((movie) => (
-                        <div className="searched-movie-container">
+                        <div key={movie.id} className="searched-movie-container">
                             <div className="searched-movie-title-holder">
                                 <p>{movie.title}</p>
                             </div>
                             <img src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`} alt={movie.title} />
-                            <button>Add to your movies</button>
+                            <button onClick={() => addMovieHandler(movie)}>Add movie</button>
                         </div>
                     ))}
                 </div>
