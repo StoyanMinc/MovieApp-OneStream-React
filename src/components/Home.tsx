@@ -14,6 +14,7 @@ export default function Home() {
     const [movieTitles, setMovieTitles] = useState<string[]>([]);
     const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
 
+    console.log(movieTitles);
 
     const fileUploadHandler = (event: ChangeEvent<HTMLInputElement>): void => {
 
@@ -23,9 +24,10 @@ export default function Home() {
         const reader = new FileReader();
 
         reader.onload = (e: ProgressEvent<FileReader>) => {
-            const text = e.target?.result as string;
+            let text = e.target?.result as string;
+            text = text.replace(/^\uFEFF/, '');
             const movies = text
-                .split('\n')
+                .split(/\r?\n/)
                 .map(line => line.trim())
                 .filter(Boolean);
             setMovieTitles(movies);
@@ -33,7 +35,7 @@ export default function Home() {
             setIsMoviesSaved(false);
         };
 
-        reader.readAsText(file);
+        reader.readAsText(file, 'utf-8');
         toast.success('Successfully upload your movie titles!')
     }
 
@@ -48,7 +50,8 @@ export default function Home() {
     const searchMovies = async () => {
         try {
             const fetchedMovies = await fetchMoviesByTitles(selectedMovies, language);
-            const moviesWithGenres = fetchedMovies.map(movie => ({
+
+            const moviesWithGenres = fetchedMovies.filter((movie) => movie.id).map(movie => ({
                 ...movie,
                 genres: getMovieGenres(genres, movie.genre_ids ?? []), // adds `genres` field
             }));
@@ -65,7 +68,7 @@ export default function Home() {
         <div className="home-container">
             <div className="upload-box">
                 <label htmlFor="file">Upload a .txt file with movie titles</label>
-                <input type="file" id="file" name="file" onChange={fileUploadHandler} />
+                <input type="file" id="file" name="file" accept=".txt" onChange={fileUploadHandler} />
             </div>
 
             {movieTitles.length > 0 && (
@@ -74,7 +77,7 @@ export default function Home() {
                         <label htmlFor="language">Choose language:</label>
                         <select value={language} onChange={(e) => setLanguage(e.target.value)}>
                             {languages.map((l) => {
-                                return <option value={l.value}>{l.text}</option>
+                                return <option key={l.value} value={l.value}>{l.text}</option>
 
                             })}
                         </select>
