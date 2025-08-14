@@ -14,7 +14,6 @@ export default function Home() {
     const [movieTitles, setMovieTitles] = useState<string[]>([]);
     const [selectedMovies, setSelectedMovies] = useState<string[]>([]);
 
-    console.log(movieTitles);
 
     const fileUploadHandler = (event: ChangeEvent<HTMLInputElement>): void => {
 
@@ -24,10 +23,9 @@ export default function Home() {
         const reader = new FileReader();
 
         reader.onload = (e: ProgressEvent<FileReader>) => {
-            let text = e.target?.result as string;
-            text = text.replace(/^\uFEFF/, '');
+            const text = e.target?.result as string;
             const movies = text
-                .split(/\r?\n/)
+                .split('\n')
                 .map(line => line.trim())
                 .filter(Boolean);
             setMovieTitles(movies);
@@ -35,7 +33,7 @@ export default function Home() {
             setIsMoviesSaved(false);
         };
 
-        reader.readAsText(file, 'utf-8');
+        reader.readAsText(file);
         toast.success('Successfully upload your movie titles!')
     }
 
@@ -50,7 +48,6 @@ export default function Home() {
     const searchMovies = async () => {
         try {
             const fetchedMovies = await fetchMoviesByTitles(selectedMovies, language);
-
             const moviesWithGenres = fetchedMovies.filter((movie) => movie.id).map(movie => ({
                 ...movie,
                 genres: getMovieGenres(genres, movie.genre_ids ?? []), // adds `genres` field
@@ -68,7 +65,7 @@ export default function Home() {
         <div className="home-container">
             <div className="upload-box">
                 <label htmlFor="file">Upload a .txt file with movie titles</label>
-                <input type="file" id="file" name="file" accept=".txt" onChange={fileUploadHandler} />
+                <input type="file" id="file" name="file" onChange={fileUploadHandler} />
             </div>
 
             {movieTitles.length > 0 && (
